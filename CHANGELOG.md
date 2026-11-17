@@ -5,6 +5,21 @@
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+## [1.0.1] - 2026-11-18
+
+### 修复
+
+- **驱动引导路径崩溃** —— `app.py` 使用 `os` 但未导入，首次运行引导装驱动时会抛 `NameError`
+
+### 工程
+
+- 新增 GitHub Actions 流水线：
+  - `ci.yml` —— PR 时跑 pytest（3.10/3.12）、ruff、模块导入与传感器桥接验证
+  - `release.yml` —— main 上版本号变化时自动打包并发布 Release
+- `main` 分支启用保护：必须走 PR，`test` / `lint` / `sanity` 全绿方可合并
+- 新增 9 个单元测试（格式化、评分、硬件命名、命中测试、几何缩放）
+- 新增 PR 模板与 `CONTRIBUTING.md`
+
 ## [1.0.0] - 2026-11-17
 
 首个可用版本。
