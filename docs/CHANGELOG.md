@@ -18,9 +18,12 @@
 
 ### 文档
 
-- 新增 `VERSIONING.md`：明确语义化版本的升位判定标准与发版流程
+- **文档目录整理**：除 `README.md` 外，其余文档统一迁入 `docs/`，
+  README 增加目录导航与文档索引表
+- 新增 `docs/VERSIONING.md`：明确语义化版本的升位判定标准与发版流程
 - `CONTRIBUTING.md` 增加「文档同步（强制）」一节，规定改动类型与必更文档的对应关系
 - PR 模板加入文档同步检查项
+- `release.yml` 的 `body_path` 跟进为 `docs/RELEASE_NOTES.md`
 
 ## [1.1.0] - 2026-11-18
 
