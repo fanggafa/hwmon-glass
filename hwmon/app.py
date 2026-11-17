@@ -27,12 +27,17 @@ def _dpi_scale() -> float:
 
 class App:
     def __init__(self):
+        from .settings import Settings
+
         self.scale = _dpi_scale()
+        self.settings = Settings.load()
         self.panel = Panel(scale=self.scale)
+        self.panel.opacity = self.settings.opacity
         self.sampler = Sampler()
         self.window = None          # created lazily in show_panel
         self.panel_window = None
         self.details_window = None
+        self.settings_window = None
         self.visible = False
         self._running = True
         self._last_snap = None
@@ -43,7 +48,14 @@ class App:
             on_settings=self.show_settings,
             on_details=self.show_details,
             on_exit=self.quit,
-            on_field=lambda _k: self.render_and_push())
+            on_field=self._on_tray_field)
+
+    def _on_tray_field(self, key):
+        """Remembers the tray icon face and repaints it."""
+        self.settings.tray_field = key
+        self.settings.save()
+        self.tray.field = key
+        self.tray.refresh()
 
     # -- panel ------------------------------------------------------------
     def _panel_position(self) -> tuple[int, int]:
@@ -243,7 +255,76 @@ class App:
             self.details_window = None
 
     def show_settings(self):
-        pass
+        from .settings_sheet import SettingsSheet
+
+        if self.settings_window is not None and self.settings_window.alive():
+            self.settings_window.destroy()
+            self.settings_window = None
+            return
+
+        sheet = SettingsSheet(self.settings, self.scale)
+        w, h = sheet.render().size
+
+        r = wt.RECT()
+        user32.SystemParametersInfoW(0x0030, 0, ctypes.byref(r), 0)
+        x = r.left + (r.right - r.left - w) // 2
+        y = r.top + (r.bottom - r.top - h) // 2
+
+        win = LayeredWindow("settings")
+        win.on_click = lambda px, py: self._on_settings_click(sheet, win, px, py)
+        win.create(x, y, w, h)
+        win.set_image(sheet.render())
+        win.show()
+        self.settings_window = win
+
+    def _on_settings_click(self, sheet, win, px, py):
+
+        from . import settings as S
+
+        key = sheet.hit_at(px, py)
+        if not key:
+            return
+
+        st = sheet.settings
+
+        if key == "close":
+            win.destroy()
+            self.settings_window = None
+            return
+
+        if key == "save":
+            st.autostart = S.autostart_enabled() if st.autostart else st.autostart
+            S.set_autostart(st.autostart)
+            st.save()
+            self._apply_settings()
+            win.destroy()
+            self.settings_window = None
+            return
+
+        if key == "opacity":
+            # the click lands at some x inside the slider track; convert it
+            off = sheet.SHADOW
+            track = sheet.hits["opacity"]
+            rel = max(0.0, min(1.0, (px - off - track[0]) / max(1, track[2])))
+            st.opacity = round(0.4 + rel * 0.6, 2)
+        elif key == "interval_inc":
+            st.interval = min(5.0, round(st.interval + 0.5, 1))
+        elif key == "interval_dec":
+            st.interval = max(0.5, round(st.interval - 0.5, 1))
+        elif key == "autostart":
+            st.autostart = not st.autostart
+        else:
+            return
+
+        win.set_image(sheet.render())
+
+    def _apply_settings(self):
+        """Pushes changed settings into the running components."""
+        st = self.settings
+        self.panel.opacity = st.opacity
+        self.sampler.interval = st.interval
+        self.tray.field = st.tray_field
+        self.render_and_push()
 
     # -- sampling ---------------------------------------------------------
     def _sample_loop(self):

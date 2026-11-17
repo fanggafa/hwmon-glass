@@ -20,6 +20,8 @@ class Panel:
         self.info: Optional[HardwareInfo] = None
         self.backdrop: Optional[Image.Image] = None
         self.weather: Optional[dict] = None
+        # how opaque the glass body is; 0.4 is very see-through, 1.0 is solid
+        self.opacity: float = 0.66
 
         self.cpu_hist = R.History(72)
         self.gpu_hist = R.History(72)
@@ -98,7 +100,8 @@ class Panel:
         # desktop show through, so no screen capture is involved (a capture
         # would photograph this very panel and freeze a stale image).
         glass = R.make_glass_body(None, (body_w, body_h), radius,
-                                  tint=(10, 16, 30), tint_strength=0.34, opacity=0.66)
+                                  tint=(10, 16, 30), tint_strength=0.34,
+                                  opacity=max(0.4, min(1.0, self.opacity)))
         img.alpha_composite(glass, (margin, margin))
 
         # sheen over the top half

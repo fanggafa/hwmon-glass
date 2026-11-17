@@ -1,4 +1,4 @@
-# Python
+﻿# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
@@ -33,3 +33,7 @@ desktop.ini
 .DS_Store
 .vscode/
 .idea/
+
+.pytest_cache/
+.ruff_cache/
+settings.json
