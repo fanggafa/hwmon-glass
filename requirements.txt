@@ -1,4 +1,9 @@
+# Pinned exactly: PyInstaller bundles the installed Pillow build, and a newer
+# Pillow ships more compiled plugins (~5 MB more in the executable). CI and the
+# local build must agree, otherwise Releases come out larger than a local build
+# for no functional reason.
+Pillow==11.2.1
+
 psutil>=5.9
-Pillow>=10.0
 pythonnet>=3.0
 pystray>=0.19
