@@ -4,6 +4,10 @@ Windows 系统托盘常驻的硬件监控面板，**iOS 26 液态玻璃**风格�
 
 无边框、逐像素透明、真实玻璃质感；CPU / GPU / 内存 / 磁盘 / 网络 / 温度一目了然。
 
+[![Release](https://img.shields.io/github/v/release/fanggafa/hwmon-glass)](https://github.com/fanggafa/hwmon-glass/releases/latest)
+[![License](https://img.shields.io/github/license/fanggafa/hwmon-glass)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-blue)](https://github.com/fanggafa/hwmon-glass)
+
 ![面板](docs/panel.png)
 
 ---
@@ -49,7 +53,7 @@ Windows 系统托盘常驻的硬件监控面板，**iOS 26 液态玻璃**风格�
 
 ### 方式一：下载即用（推荐）
 
-从 [Releases](../../releases) 下载 **`LiquidGlassMon.exe`**（约 27MB），双击运行即可。
+从 [Releases](https://github.com/fanggafa/hwmon-glass/releases/latest) 下载 **`LiquidGlassMon.exe`**（27MB），双击运行即可。
 
 **无需安装 Python，无需 pip，无需手动找驱动。**
 
@@ -67,8 +71,8 @@ Windows 系统托盘常驻的硬件监控面板，**iOS 26 液态玻璃**风格�
 **环境要求**：Windows 10/11 64 位，Python 3.10+
 
 ```powershell
-git clone https://github.com/<your-name>/<repo>.git
-cd <repo>
+git clone https://github.com/fanggafa/hwmon-glass.git
+cd hwmon-glass
 
 python setup.py        # 依赖包 + 传感器运行时
 python start.pyw       # 或双击 start.pyw
