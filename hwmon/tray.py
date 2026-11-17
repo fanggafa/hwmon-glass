@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import threading
+import time
 from typing import Callable, Optional
 
 import pystray
@@ -62,6 +63,7 @@ class TrayIcon:
         self._on_field = on_field
         self._snap: Optional[Snapshot] = None
         self._icon: Optional[pystray.Icon] = None
+        self._thread: Optional[threading.Thread] = None
         self._lock = threading.Lock()
 
     # -- icon artwork -----------------------------------------------------
@@ -147,11 +149,37 @@ class TrayIcon:
 
     # -- public -----------------------------------------------------------
     def start(self):
+        """Runs the tray icon on its own thread.
+
+        ``run_detached`` needs a Tk/message pump that this process does not
+        have, so the icon is created and run explicitly on a worker thread.
+        pystray marks the icon visible itself once run() starts, so no extra
+        visibility handling is needed here.
+        """
+        if self._icon is not None:
+            return
+
         self._icon = pystray.Icon(
-            "hwmon", self._render_icon(), "硬件监控",
+            "hwmon",
+            self._render_icon(),
+            "硬件监控",
             menu=self._build_menu(),
-            left_click=self._on_toggle if False else None)
-        self._icon.run_detached()
+        )
+
+        self._thread = threading.Thread(target=self._run_icon, name="tray", daemon=True)
+        self._thread.start()
+
+        # Give the worker a moment so the icon exists before the first update.
+        for _ in range(40):
+            if getattr(self._icon, "visible", False):
+                break
+            time.sleep(0.05)
+
+    def _run_icon(self):
+        try:
+            self._icon.run()
+        except Exception:
+            self._icon = None
 
     def refresh(self):
         if self._icon is None:
