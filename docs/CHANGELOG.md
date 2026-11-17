@@ -5,6 +5,26 @@
 格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，
 版本号遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
 
+**具体的升位判定标准见 [VERSIONING.md](VERSIONING.md)**：只有修 bug 升第三位，
+新增功能升第二位，不兼容变更升第一位，纯文档不升版。
+
+## [1.1.1] - 2026-11-18
+
+### 修复
+
+- **可执行文件体积翻倍** —— `LiquidGlassMon.spec` 里 `lib/` 目录同时作为
+  `binaries` 和 `datas` 收录，导致 17 个传感器 DLL 被打包两次。
+  单文件从 32.4MB 回到 27.3MB
+
+### 文档
+
+- **文档目录整理**：除 `README.md` 外，其余文档统一迁入 `docs/`，
+  README 增加目录导航与文档索引表
+- 新增 `docs/VERSIONING.md`：明确语义化版本的升位判定标准与发版流程
+- `CONTRIBUTING.md` 增加「文档同步（强制）」一节，规定改动类型与必更文档的对应关系
+- PR 模板加入文档同步检查项
+- `release.yml` 的 `body_path` 跟进为 `docs/RELEASE_NOTES.md`
+
 ## [1.1.0] - 2026-11-18
 
 ### 新增

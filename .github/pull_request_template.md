@@ -14,9 +14,12 @@
 
 - [ ] 本地 `pytest tests` 通过
 - [ ] 涉及界面改动时附截图
-- [ ] 如改了功能，已更新 `README.md`
-- [ ] 如要发版，已在 `CHANGELOG.md` 记录并提升 `hwmon/__init__.py` 的版本号
+- [ ] **文档已同步**（见 `CONTRIBUTING.md` 的「文档同步」一节）：
+  - [ ] `README.md` 功能表 / 用法 / 已知限制
+  - [ ] `CHANGELOG.md` 本版条目
+  - [ ] 如发版，`RELEASE_NOTES.md` 已更新
+- [ ] 如要发版，已按 `VERSIONING.md` 提升 `hwmon/__init__.py` 的版本号
 
 ## 截图 / 补充说明
 
-<!-- 界面改动请附前后对比 -->
+<!-- 界面改动请附前后对比；踩过的坑写在这里，会转写到文档 -->

@@ -31,10 +31,11 @@ if os.path.exists(pawnio):
 a = Analysis(
     ["main.py"],
     pathex=[ROOT],
+    # The assemblies go in as binaries only. Listing the whole lib/ directory
+    # under `datas` as well packed every DLL twice and added ~3.8 MB to the
+    # executable for nothing.
     binaries=lib_dlls,
-    datas=assets + [
-        (os.path.join(ROOT, "lib"), "lib"),
-    ],
+    datas=assets,
     hiddenimports=[
         "clr",
         "pystray._win32",
