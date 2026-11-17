@@ -12,8 +12,18 @@ permissions:
   contents: read
 
 jobs:
+  # Each matrix leg reports as "test (3.10)" / "test (3.12)". Branch protection
+  # needs one stable name, so the rule requires this gate job, which only
+  # succeeds when every leg passed.
   test:
     name: test
+    needs: test-matrix
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm the matrix passed
+        run: echo "all test legs passed"
+
+  test-matrix:
     runs-on: windows-latest
     strategy:
       fail-fast: false
