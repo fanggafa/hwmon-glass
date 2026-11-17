@@ -10,8 +10,6 @@ from __future__ import annotations
 
 import ctypes
 import os
-import sys
-from typing import Optional
 
 _LIBDIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "lib")
 

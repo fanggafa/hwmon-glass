@@ -2,12 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Optional
 
 from PIL import Image, ImageDraw
 
 from . import render as R
-from .window import LayeredWindow
 
 
 class SetupSheet:
@@ -55,7 +53,6 @@ class SetupSheet:
     def _paint(self, img: Image.Image):
         d = ImageDraw.Draw(img)
         pad = self.s(20)
-        w = img.width - pad * 2
 
         f_title = R._load_font(self.s(16), bold=True)
         f_body = R._load_font(self.s(12))

@@ -616,11 +616,6 @@ class Sampler:
     def _read_system_temp(self, s: Snapshot):
         """WMI thermal zones; absent on most desktops."""
         try:
-            c = ctypes.windll.kernel32
-            pass
-        except Exception:
-            pass
-        try:
             import subprocess
             out = subprocess.run(
                 ["powershell", "-NoProfile", "-Command",

@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import math
-import time
 from typing import Optional
 
 from PIL import Image, ImageDraw, ImageFilter
@@ -140,7 +138,7 @@ class Panel:
         d = ImageDraw.Draw(img)
         f = R._load_font(self.s(11))
         tw = R.text_size(d, text, f)[0]
-        pad_x, pad_y = self.s(9), self.s(4)
+        pad_x = self.s(9)
         w = tw + pad_x * 2
         h = self.s(21)
 
@@ -258,7 +256,6 @@ class Panel:
 
     def _draw_button(self, d, x, y, size, kind, hover=False):
         """Round glass button; highlights and shows nothing else when hovered."""
-        radius = size / 2
         if hover:
             d.ellipse([x, y, x + size, y + size],
                       fill=(255, 255, 255, 52), outline=(255, 255, 255, 150), width=1)

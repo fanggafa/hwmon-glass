@@ -8,7 +8,6 @@ from PIL import Image, ImageDraw
 
 from . import render as R
 from .hardware import HardwareInfo
-from .window import LayeredWindow
 
 
 class DetailsPanel:

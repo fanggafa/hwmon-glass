@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import ctypes
-import sys
+import os
 import threading
 import time
 

@@ -64,7 +64,7 @@ def install() -> tuple[bool, str]:
         return False, "安装包缺失（assets/PawnIO_setup.exe）"
 
     # -unrestricted is the whole point: the default build refuses MSR reads.
-    args = f'-install -unrestricted -silent'
+    args = '-install -unrestricted -silent'
 
     try:
         rc = ctypes.windll.shell32.ShellExecuteW(

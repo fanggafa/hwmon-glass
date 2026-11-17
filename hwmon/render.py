@@ -9,14 +9,10 @@ from __future__ import annotations
 
 import ctypes
 import ctypes.wintypes as wt
-import math
-import time
-from dataclasses import dataclass
 from typing import Optional
 
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-from .sampler import Snapshot
 
 # ----------------------------------------------------------------------------
 #  Geometry (design pixels; everything scales by DPI)
@@ -285,7 +281,6 @@ def draw_specular_rim(target: Image.Image, box: tuple[int, int, int, int], radiu
 def draw_outer_shadow(target: Image.Image, box: tuple[int, int, int, int],
                       radius: int, margin: int, opacity: float = 0.85):
     x0, y0, x1, y1 = box
-    w, h = x1 - x0, y1 - y0
     steps = 8
     layer = Image.new("RGBA", target.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
