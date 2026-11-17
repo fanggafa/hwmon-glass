@@ -188,6 +188,31 @@ MSR 与 SuperIO 没有成熟的纯 Python 库。LibreHardwareMonitor 是 .NET �
 
 ---
 
+## 开发
+
+```powershell
+pip install -r requirements.txt pytest ruff
+python -m pytest tests -v          # 单元测试
+python -m ruff check hwmon tests --select E9,F
+```
+
+### 贡献流程
+
+```
+feat/xxx ──PR──▶ CI 检查 ──通过──▶ squash 合并到 main
+                                    │
+                                    └─ 版本号变化时自动发布 Release
+```
+
+`main` 受分支保护：**不能直接 push**，必须走 PR，且 `test` / `lint` / `sanity` 三项检查全绿才能合并。
+
+发版不需要手动打 tag —— 只要在 PR 里提升 `hwmon/__init__.py` 的 `__version__`，
+合并后 `Release` 工作流会自动构建 exe、算校验值、创建 Release。
+
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+---
+
 ## 已知限制
 
 - **内存温度**多数硬件不支持（需 SPD 传感器）
