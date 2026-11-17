@@ -1,7 +1,12 @@
 name: CI
 
 # Runs on every pull request and on pushes to main. A PR cannot merge while
-# this fails, because the branch-protection rule requires the "test" job.
+# this fails, because the branch-protection rule requires the "test", "lint"
+# and "sanity" jobs.
+#
+# Everything is pinned to Python 3.10 to match the local build: the PyInstaller
+# bundle carries the interpreter, so a different CI version yields a needlessly
+# larger executable.
 on:
   pull_request:
     branches: [main]
@@ -11,31 +16,19 @@ on:
 permissions:
   contents: read
 
+env:
+  PYTHON_VERSION: "3.10"
+
 jobs:
-  # Each matrix leg reports as "test (3.10)" / "test (3.12)". Branch protection
-  # needs one stable name, so the rule requires this gate job, which only
-  # succeeds when every leg passed.
   test:
     name: test
-    needs: test-matrix
-    runs-on: ubuntu-latest
-    steps:
-      - name: Confirm the matrix passed
-        run: echo "all test legs passed"
-
-  test-matrix:
     runs-on: windows-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python: ["3.10", "3.12"]
-
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python }}
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
 
       - name: Install dependencies
@@ -57,7 +50,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ env.PYTHON_VERSION }}
       - name: Install ruff
         run: pip install ruff
       # E/F are the pyflakes/pycodestyle errors that catch real bugs.
@@ -71,7 +64,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip

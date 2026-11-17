@@ -13,6 +13,10 @@ on:
 permissions:
   contents: write
 
+env:
+  # Must match ci.yml and the local toolchain: the bundle embeds this runtime.
+  PYTHON_VERSION: "3.10"
+
 jobs:
   version:
     name: check version
@@ -48,7 +52,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
       - name: Install dependencies
         run: |
@@ -68,7 +72,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
 
       - name: Install dependencies
