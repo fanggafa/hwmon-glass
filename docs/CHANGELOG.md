@@ -8,6 +8,19 @@
 **具体的升位判定标准见 [VERSIONING.md](VERSIONING.md)**：只有修 bug 升第三位，
 新增功能升第二位，不兼容变更升第一位，纯文档不升版。
 
+## [1.1.3] - 2026-11-18
+
+### 修复
+
+- **CI 构建的产物比本地大 5MB** —— CI 的 `pip install -r requirements.txt`
+  装到了最新的 Pillow 12.3，它比 11.2 多带若干编译插件，PyInstaller 会全部打进 exe。
+  现在把 `Pillow` 锁定为 `==11.2.1`，两边体积对齐到 **17.47MB**
+
+### 文档
+
+- `requirements.txt` 注释说明为什么 Pillow 需要精确锁版本
+- `setup.py` 改为按 `requirements.txt` 安装，避免绕过版本锁
+
 ## [1.1.2] - 2026-11-18
 
 ### 修复

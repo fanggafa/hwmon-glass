@@ -1,4 +1,4 @@
-## 液态玻璃硬件监控 v1.1.2
+## 液态玻璃硬件监控 v1.1.3
 
 Windows 系统托盘硬件监控面板，iOS 26 液态玻璃风格。**开箱即用，无需安装 Python。**
 
@@ -8,21 +8,24 @@ Windows 系统托盘硬件监控面板，iOS 26 液态玻璃风格。**开箱即
 
 ### 本次更新
 
-**大幅瘦身：32.4MB → 17.5MB**，功能完全一致。
+**体积收敛完成：32.4MB → 17.47MB**，功能完全一致，且 CI 与本地构建现在完全对齐。
 
-v1.1.1 以为体积来自打包配置里的重复收录，改掉后**并没有变小**。真正的原因在依赖清单：
+降体积经过三轮排查，前两轮都没找对地方：
 
-```
-requirements.txt
-  psutil, Pillow, pythonnet, pystray   ← 代码在用
-  numpy                                ← 从未 import
-  requests                             ← 从未 import
-```
+| 版本 | 体积 | 判断 |
+| --- | --- | --- |
+| v1.1.0 | 32.40 MB | — |
+| v1.1.1 | 32.40 MB | ❌ 以为是打包配置重复收录，改了没效果 |
+| v1.1.2 | 22.50 MB | 移除未使用的 `numpy` / `requests`，降了 10MB |
+| **v1.1.3** | **17.47 MB** | 锁定 Pillow 版本，CI 与本地一致 |
 
-CI 按 `requirements.txt` 安装依赖，PyInstaller 于是把整个 numpy 运行时
-一起打进了 exe。本机构建恰好没触发这个问题，掩盖了它。
+**v1.1.2 做的事**：`requirements.txt` 列着 `numpy` 和 `requests`，代码从未导入，
+CI 按清单安装后 PyInstaller 把整个 numpy 运行时都打了进去。
 
-这次移除无用依赖，并在打包配置里显式排除。**比 v1.0.0 的 27.25MB 还小 10MB。**
+**v1.1.3 做的事**：CI 装到的是最新 Pillow 12.3，比 11.2 多带若干编译插件。
+锁定 `Pillow==11.2.1` 后，CI 产物与本地一致，又省 5MB。
+
+比 v1.0.0 的 27.25MB 小将近 10MB。
 
 **文档**
 
@@ -68,7 +71,7 @@ CI 按 `requirements.txt` 安装依赖，PyInstaller 于是把整个 numpy 运�
 
 | 文件 | 说明 |
 | --- | --- |
-| `LiquidGlassMon.exe` | 单文件程序，17.5MB，双击运行 |
+| `LiquidGlassMon.exe` | 单文件程序，17.47MB，双击运行 |
 | `SHA256SUMS.txt` | 校验值 |
 
 ### 使用

@@ -46,6 +46,11 @@ a = Analysis(
     # numpy/requests are not imported anywhere; excluding them keeps a CI runner
     # (which installs whatever is in requirements) from bundling ~6 MB of
     # numeric libraries the app never touches.
+    #
+    # Do NOT exclude socket: multiprocessing imports it, and PyInstaller's own
+    # runtime hook for multiprocessing fails at startup with
+    # "No module named 'socket'". ssl stays for the same reason (harmless, and
+    # dropping it only saves ~1.8 MB while risking the runtime).
     excludes=[
         "tkinter", "matplotlib", "scipy", "pandas", "IPython", "pytest",
         "numpy", "requests", "urllib3", "charset_normalizer", "idna",
