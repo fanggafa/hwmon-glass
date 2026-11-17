@@ -1,0 +1,89 @@
+name: CI
+
+# Runs on every pull request and on pushes to main. A PR cannot merge while
+# this fails, because the branch-protection rule requires the "test" job.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run tests
+        run: python -m pytest tests -v
+
+      - name: Byte-compile every module
+        run: python -m compileall -q hwmon main.py start.pyw
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ruff
+        run: pip install ruff
+      # E/F are the pyflakes/pycodestyle errors that catch real bugs.
+      - name: Ruff
+        run: ruff check hwmon tests --select E9,F --output-format=github
+
+  sanity:
+    name: sanity
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Import every module
+        run: |
+          python -c "import hwmon.app, hwmon.panel, hwmon.render, hwmon.sampler"
+          python -c "import hwmon.lhm, hwmon.hardware, hwmon.driver"
+          python -c "import hwmon.details, hwmon.setup_sheet, hwmon.window, hwmon.elevate"
+      - name: Fetch sensor runtime
+        run: python fetch_deps.py
+      - name: Verify sensor bridge loads
+        run: |
+          python -c "
+          import sys; sys.path.insert(0, '.')
+          from hwmon.lhm import LhmSensors
+          s = LhmSensors()
+          ok = s.start()
+          print('LHM started:', ok)
+          # A hosted runner has no GPU, so an empty reading is expected; the
+          # point is that the assemblies load and the API responds.
+          r = s.read()
+          print('keys:', sorted(r.keys()))
+          s.stop()
+          "
