@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Third-party sensor runtime (downloaded by fetch_deps.py, MPL-2.0)
+lib/
+*.dll
+
+# Bundled installer, fetched at build time
+assets/PawnIO_setup.exe
+
+# PyInstaller output
+build/
+dist/
+*.spec
+!LiquidGlassMon.spec
+runtime/
+
+# Local artefacts
+*.log
+*.png
+!docs/*.png
+*.json
+.driver_declined
+
+# OS / editor
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
