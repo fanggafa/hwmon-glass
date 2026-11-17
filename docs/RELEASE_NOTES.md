@@ -1,4 +1,4 @@
-## 液态玻璃硬件监控 v1.1.1
+## 液态玻璃硬件监控 v1.1.2
 
 Windows 系统托盘硬件监控面板，iOS 26 液态玻璃风格。**开箱即用，无需安装 Python。**
 
@@ -8,12 +8,27 @@ Windows 系统托盘硬件监控面板，iOS 26 液态玻璃风格。**开箱即
 
 ### 本次更新
 
-**修复体积翻倍** —— 打包配置把传感器 DLL 收录了两次，单文件从 32.4MB 回到 **27.3MB**，功能完全一致。
+**大幅瘦身：32.4MB → 17.5MB**，功能完全一致。
 
-**文档补全**
+v1.1.1 以为体积来自打包配置里的重复收录，改掉后**并没有变小**。真正的原因在依赖清单：
 
-- 新增 [`VERSIONING.md`](https://github.com/fanggafa/hwmon-glass/blob/main/VERSIONING.md)：语义化版本的升位判定标准
-- `CONTRIBUTING.md` 增加「文档同步（强制）」：改了什么代码，必须更新哪些文档
+```
+requirements.txt
+  psutil, Pillow, pythonnet, pystray   ← 代码在用
+  numpy                                ← 从未 import
+  requests                             ← 从未 import
+```
+
+CI 按 `requirements.txt` 安装依赖，PyInstaller 于是把整个 numpy 运行时
+一起打进了 exe。本机构建恰好没触发这个问题，掩盖了它。
+
+这次移除无用依赖，并在打包配置里显式排除。**比 v1.0.0 的 27.25MB 还小 10MB。**
+
+**文档**
+
+- [`VERSIONING.md`](https://github.com/fanggafa/hwmon-glass/blob/main/docs/VERSIONING.md)：语义化版本的升位判定标准
+- [`CONTRIBUTING.md`](https://github.com/fanggafa/hwmon-glass/blob/main/docs/CONTRIBUTING.md) 增加「文档同步（强制）」
+- 除 `README.md` 外，文档统一迁入 `docs/`，README 建立索引
 
 ---
 
@@ -53,7 +68,7 @@ Windows 系统托盘硬件监控面板，iOS 26 液态玻璃风格。**开箱即
 
 | 文件 | 说明 |
 | --- | --- |
-| `LiquidGlassMon.exe` | 单文件程序，27.3MB，双击运行 |
+| `LiquidGlassMon.exe` | 单文件程序，17.5MB，双击运行 |
 | `SHA256SUMS.txt` | 校验值 |
 
 ### 使用

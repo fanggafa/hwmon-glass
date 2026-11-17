@@ -31,9 +31,8 @@ if os.path.exists(pawnio):
 a = Analysis(
     ["main.py"],
     pathex=[ROOT],
-    # The assemblies go in as binaries only. Listing the whole lib/ directory
-    # under `datas` as well packed every DLL twice and added ~3.8 MB to the
-    # executable for nothing.
+    # The sensor assemblies go in as binaries only. Listing the whole lib/
+    # directory under `datas` as well packed every DLL twice.
     binaries=lib_dlls,
     datas=assets,
     hiddenimports=[
@@ -44,7 +43,13 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=["tkinter", "matplotlib", "scipy", "pandas", "IPython", "pytest"],
+    # numpy/requests are not imported anywhere; excluding them keeps a CI runner
+    # (which installs whatever is in requirements) from bundling ~6 MB of
+    # numeric libraries the app never touches.
+    excludes=[
+        "tkinter", "matplotlib", "scipy", "pandas", "IPython", "pytest",
+        "numpy", "requests", "urllib3", "charset_normalizer", "idna",
+    ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,

@@ -31,7 +31,7 @@ Windows 系统托盘常驻的硬件监控面板，**iOS 26 液态玻璃**风格�
 
 ### 方式一：下载即用（推荐）
 
-从 [Releases](https://github.com/fanggafa/hwmon-glass/releases/latest) 下载 **`LiquidGlassMon.exe`**（27MB），双击运行即可。
+从 [Releases](https://github.com/fanggafa/hwmon-glass/releases/latest) 下载 **`LiquidGlassMon.exe`**（17.5MB），双击运行即可。
 
 **无需安装 Python，无需 pip，无需手动找驱动。**
 

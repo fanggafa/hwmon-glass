@@ -8,6 +8,20 @@
 **具体的升位判定标准见 [VERSIONING.md](VERSIONING.md)**：只有修 bug 升第三位，
 新增功能升第二位，不兼容变更升第一位，纯文档不升版。
 
+## [1.1.2] - 2026-11-18
+
+### 修复
+
+- **单文件从 32.4MB 降到 17.5MB** —— v1.1.1 只修了 spec 里的重复收录，
+  体积没降下来。真正原因是 `requirements.txt` 列着 `numpy` / `requests`，
+  但代码从未导入它们；CI 安装后 PyInstaller 把整个 numpy 运行时打进了 exe。
+  现在移除这两个无用依赖，并在 spec 的 `excludes` 里显式排除。
+  比 v1.0.0 的 27.25MB 还小 10MB
+
+### 文档
+
+- 同步更新 `README.md`、`RELEASE_NOTES.md` 中的体积数字
+
 ## [1.1.1] - 2026-11-18
 
 ### 修复
