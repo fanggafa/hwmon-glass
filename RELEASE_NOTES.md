@@ -1,8 +1,15 @@
-## 液态玻璃硬件监控 v1.0.0
+## 液态玻璃硬件监控 v1.0.1
 
 Windows 系统托盘硬件监控面板，iOS 26 液态玻璃风格。**开箱即用，无需安装 Python。**
 
 ![panel](https://raw.githubusercontent.com/fanggafa/hwmon-glass/main/docs/panel.png)
+
+---
+
+### 本次更新
+
+- **修复**：首次运行引导安装驱动时崩溃（`app.py` 缺少 `os` 导入）
+- 新增 CI 流水线与分支保护，后续版本更稳定
 
 ---
 
