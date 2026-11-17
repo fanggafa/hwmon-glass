@@ -9,10 +9,8 @@ import sys
 REQUIRED = [
     ("psutil", "psutil"),
     ("PIL", "Pillow"),
-    ("numpy", "numpy"),
     ("clr", "pythonnet"),
     ("pystray", "pystray"),
-    ("requests", "requests"),
 ]
 
 
